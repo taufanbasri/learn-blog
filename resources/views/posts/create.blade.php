@@ -1,6 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
+  <div class="col-sm-8 blog-main">
     <h1>Publish a Post</h1>
     <hr>
 
@@ -16,6 +17,11 @@
             <textarea name="body" id="body" class="form-control"></textarea>
         </div>
 
-        <button type="submit" class="btn btn-primary">Publish</button>
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary">Publish</button>
+        </div>
+
     </form>
+  </div>
+
 @endsection

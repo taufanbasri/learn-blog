@@ -13,3 +13,5 @@
 
 Route::get('/', 'PostController@index');
 Route::resource('/posts', 'PostController');
+
+Route::post('/posts/{post}/comments', 'CommentController@store');
