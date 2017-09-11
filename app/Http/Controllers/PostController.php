@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class PostController extends Controller
 {
@@ -18,9 +19,33 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::latest()->get();
+      // $posts = Post::latest();
 
-        return view('posts.index', compact('posts'));
+        $posts = Post::latest()
+          ->filter(request(['month', 'year']))
+          ->get();
+
+        // kode ini untuk memperbagus kodingan di pindahkan ke scope di model post menjadi scopeFilter.
+        // if ($month = request('month')) {
+        //   $posts->whereMonth('created_at', Carbon::parse($month)->month);
+        // }
+        //
+        // if ($year = request('year')) {
+        //   $posts->whereYear('created_at', $year);
+        // }
+
+        // $posts = $posts->get();
+
+
+        $archives = Post::selectRaw('year(created_at) year, monthname(created_at) month, count(*) published')
+        ->groupBy('year', 'month')
+        ->orderByRaw('min(created_at) desc')
+        ->get()
+        ->toArray();
+
+        // return $archives;
+
+        return view('posts.index', compact('posts', 'archives'));
     }
 
     /**
