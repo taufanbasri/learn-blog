@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+    public function __construct()
+    {
+      $this->middleware('auth')->except(['index', 'show']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -37,8 +41,12 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
+      $this->validate(request(), [
+        'title' => 'required',
+        'body' => 'required',
+      ]);
 //        Cara 1
 //        $post = new Post;
 //
@@ -54,7 +62,16 @@ class PostController extends Controller
 //        ]);
 
 //        cara 3, recomend
-        Post::create(request(['title', 'body']));
+        // Post::create([
+        //   'title' => request('title'),
+        //   'body' => request('body'),
+        //   'user_id' => auth()->id(),
+        // ]);
+
+        // kode dibawah save terletak di model Post
+        auth()->user()->publish(
+          new Post(request(['title', 'body']))
+        );
 
         return redirect('/');
     }

@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Post;
 
 class User extends Authenticatable
 {
@@ -27,8 +28,20 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function post()
+    public function posts()
     {
       return $this->hasMany(Post::class);
+    }
+
+    public function publish(Post $post)
+    {
+      $this->posts()->save($post);
+
+      // kode diatas merepresentasikan cara berikut
+      // Post::create([
+      //   'title' => request('title'),
+      //   'body' => request('body'),
+      //   'user_id' => auth()->id(),
+      // ]);
     }
 }
