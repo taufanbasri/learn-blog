@@ -44,4 +44,13 @@ class Post extends Model
     {
       return $this->belongsTo(User::class);
     }
+
+    public static function archives($value='')
+    {
+      return static::selectRaw('year(created_at) year, monthname(created_at) month, count(*) published')
+      ->groupBy('year', 'month')
+      ->orderByRaw('min(created_at) desc')
+      ->get()
+      ->toArray();
+    }
 }

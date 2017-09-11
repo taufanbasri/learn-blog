@@ -36,16 +36,19 @@ class PostController extends Controller
 
         // $posts = $posts->get();
 
+        // cara ini menggunakan dedicated method archives yang ada di model. sehingga kode lebih bersih
+        // $archives = Post::archives();
 
-        $archives = Post::selectRaw('year(created_at) year, monthname(created_at) month, count(*) published')
-        ->groupBy('year', 'month')
-        ->orderByRaw('min(created_at) desc')
-        ->get()
-        ->toArray();
+        // ini jika tidak menggunakan dedicated method
+        // $archives = Post::selectRaw('year(created_at) year, monthname(created_at) month, count(*) published')
+        // ->groupBy('year', 'month')
+        // ->orderByRaw('min(created_at) desc')
+        // ->get()
+        // ->toArray();
 
         // return $archives;
 
-        return view('posts.index', compact('posts', 'archives'));
+        return view('posts.index', compact('posts'));
     }
 
     /**
@@ -55,8 +58,6 @@ class PostController extends Controller
      */
     public function create()
     {
-
-
         return view('posts.create');
     }
 
