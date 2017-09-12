@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\Repositories\Posts;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -12,18 +13,18 @@ class PostController extends Controller
     {
       $this->middleware('auth')->except(['index', 'show']);
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-      // $posts = Post::latest();
 
-        $posts = Post::latest()
-          ->filter(request(['month', 'year']))
-          ->get();
+    public function index(Posts $posts)
+    {
+      // ini jika menggunakan resulotion di App\Repositories\Posts
+      $posts = $posts->all();
+
+
+      // $posts = Post::latest();
+        //
+        // $posts = Post::latest()
+        //   ->filter(request(['month', 'year']))
+        //   ->get();
 
         // kode ini untuk memperbagus kodingan di pindahkan ke scope di model post menjadi scopeFilter.
         // if ($month = request('month')) {
@@ -33,7 +34,7 @@ class PostController extends Controller
         // if ($year = request('year')) {
         //   $posts->whereYear('created_at', $year);
         // }
-
+        //
         // $posts = $posts->get();
 
         // cara ini menggunakan dedicated method archives yang ada di model. sehingga kode lebih bersih
@@ -51,11 +52,6 @@ class PostController extends Controller
         return view('posts.index', compact('posts'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('posts.create');
@@ -102,48 +98,8 @@ class PostController extends Controller
         return redirect('/');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Post  $post
-     * @return \Illuminate\Http\Response
-     */
     public function show(Post $post)
     {
         return view('posts.show', compact('post'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Post $post)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Post $post)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Post $post)
-    {
-        //
     }
 }
