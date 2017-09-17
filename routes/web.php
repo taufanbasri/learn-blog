@@ -6,6 +6,8 @@
 Route::get('/', 'PostController@index')->name('home');
 Route::resource('/posts', 'PostController');
 
+Route::get('/posts/tags/{tag}', 'TagsController@index');
+
 Route::post('/posts/{post}/comments', 'CommentController@store');
 
 // custom
